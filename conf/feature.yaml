@@ -1,0 +1,447 @@
+###########################################################################################################
+# user_info (the user features AND context features)
+###########################################################################################################
+
+page_name:
+  type: category
+  transform: vocab
+  parameter: [page_real_class, page_select_class, page_virtual_class, page_goods_group]
+  flag: user
+
+weekday:
+  type: category
+  transform:  vocab
+  parameter: [0, 1, 2, 3, 4, 5, 6]
+  flag: user
+
+prefer_style_id:
+  type: category
+  transform: vocab
+  parameter: [257, 1547, 781, 782, 783, 784, 163, 1701, 167, 558, 691, 181, 693, 441, 446, 576, 194, 580, 1612, 1613, 725, 730, 96, 231, 493, 752, 628, 125]
+  flag: user
+
+prefer_color_id:
+  type: category
+  transform: vocab
+  parameter: [112, 447, 739, 513, 144, 113, 336, 544, 118, 334, 939, 937, 456, 762, 140, 330, 103, 379, 81, 152, 601, 536, 475, 465, 78, 457, 364, 470, 171, 189, 664, 137, 2001, 2062, 2075, 2020, 2081, 2004, 586, 2105, 2065, 2077, 2032, 2052, 2080, 2198, 2071, 2049, 2053, 2297, 196, 2037, 694, 2051, 2073, 2039, 2351, 322, 567, 2176, 2059, 448, 2063, 2038, 2087, 2003, 2123, 2083, 2006, 2082, 2064, 2344, 2000, 2084, 2113, 2138, 2057, 2096, 2045, 2200, 2022, 2174, 2107, 701, 400, 2016, 2195, 2299, 2033, 2307, 2061, 2196, 2021, 2292, 2025, 2114, 2012, 2018, 2068, 2069, 2134, 2093, 2197, 2343, 2116, 2076, 2353, 2120, 2161, 2013, 2095, 2108, 2050, 2175, 2293, 2122, 2070, 2110, 2089, 2106, 2347, 2119, 2046, 2140, 2094, 1997, 2155, 2111, 2007, 2125, 1992, 2101, 2127, 2160, 2009, 2040, 2135, 2308, 2129, 2090, 2027, 2141, 2199, 2002, 2345, 2100, 2348, 2418, 2072, 2026, 2008, 2036, 2035, 2145, 2078, 2112, 2131, 2085, 2109, 1990, 2034, 2098, 2060, 2015, 2103, 2028, 2102, 2097, 2019, 2139, 2023, 2118, 1994, 2086, 2143, 2099, 2291, 2031, 2048, 2054, 2346, 2121, 2136, 2350, 2043, 1995, 2011, 2177, 2047, 335, 2014, 2124, 2117, 2130, 2137, 1996, 2010, 2126, 2104, 2005, 1999, 2290, 2133, 1991, 2017, 1993, 2132, 2066, 562, 2142, 2092, 2154, 2058, 2030, 2091, 2115, 2306, 194, 2067, 2088]
+  flag: user
+
+pay_maturity:
+  type: category
+  transform: vocab
+  parameter: [0, 1, 2]
+  flag: user
+
+act_lvl:
+  type: category
+  transform: vocab
+  parameter: [0, 1, 2, 3, 4, 5]
+  flag: user
+
+new_act_lvl:
+  type: category
+  transform: vocab
+  parameter: [1, 2, 3, 4, 5]
+  flag: user
+
+no_pay_days:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1000]
+    boundaries:
+  flag: user
+
+visit_minutes_7d:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 10000]
+    boundaries:
+  flag: user
+
+visit_minutes_30d:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 10000]
+    boundaries:
+  flag: user
+
+pay_cnt_7d:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 20]
+    boundaries:
+  flag: user
+
+pay_cnt_30d:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 50]
+    boundaries:
+  flag: user
+
+###########################################################################################################
+# goods_id info
+###########################################################################################################
+
+new_cate_1_id:
+  type: category
+  transform: vocab
+  parameter: [0, 1864, 2297, 2030, 2031, 2032, 2273, 2026]
+  flag: goods
+
+new_cate_2_id:
+  type: category
+  transform: vocab
+  parameter: [2275,  2090,  2027,  2028,  1942,  2038,  2057,  1894,  2039,  1963,  2171,  1954,  1760,  2298,  2299,  2300,  1888,  1745,  1948,  2089,  2022,  2041,  1959,  0,  1765,  2042,  2060,  1969,  2033,  2043,  2034,  2274,  2035]
+  flag: goods
+
+new_cate_3_id:
+  type: category
+  transform: hash_bucket
+  parameter: 200
+  flag: goods
+
+new_cate_4_id:
+  type: category
+  transform: hash_bucket
+  parameter: 200
+  flag: goods
+
+sku_cate_id:
+  type: category
+  transform: hash_bucket
+  parameter: 400
+  flag: goods
+
+trmnl_list_ctr_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_ctr_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_addbag_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_addbag_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_payrate_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_payrate_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_cvr_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_cvr_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_auv_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+trmnl_list_auv_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_ctr_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_ctr_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_addbag_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_addbag_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_payrate_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_payrate_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_cvr_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_cvr_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_auv_1:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_list_auv_7:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+special_flag:
+  type: category
+  transform: vocab
+  parameter: [0, 1]
+  flag: goods
+
+model_flag:
+  type: category
+  transform: vocab
+  parameter: [0, 1]
+  flag: goods
+
+shein_flag:
+  type: category
+  transform: vocab
+  parameter: [0, 1]
+  flag: goods
+
+staged_flag:
+  type: category
+  transform: vocab
+  parameter: [0, 1]
+  flag: goods
+
+avg_rating:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+img_commet_rate:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+size_commet_rate:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+last_comet:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+total_comet_num:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 10000]
+    boundaries:
+  flag: goods
+
+dwell_time:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 100]
+    boundaries:
+  flag: goods
+
+trmnl_sale_rate:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+country_sale_rate:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+hotness:
+  type: category
+  transform: vocab
+  parameter: [0, 1, 2, 3]
+  flag: goods
+
+high_quality_label:
+  type: category
+  transform: vocab
+  parameter: [0, 1, 2, 3]
+  flag: goods
+
+score:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 10]
+    boundaries:
+  flag: goods
+
+detail_page_price:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 50]
+    boundaries:
+  flag: goods
+
+c7d_pay_user_cnt:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 800]
+    boundaries:
+  flag: goods
+
+c30d_pay_user_cnt:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 3000]
+    boundaries:
+  flag: goods
+
+return7_rate:
+  type: continuous
+  transform: min_max
+  parameter:
+    normalization: [0, 1]
+    boundaries:
+  flag: goods
+
+# color
+attr_1_value_nm:
+  type: category
+  transform: vocab
+  parameter: ['silver', 'grey', 'black', 'taupe', 'color block', 'coffee', 'royal blue', 'brown', 'golden', 'blue', 'ginger', 'color', 'clear', 'pastel', 'white', 'olive', 'ivory', 'purple', 'gold', 'red', 'camel', 'pink', 'rust', 'leopard', 'peach', 'white multi', 'khaki', 'champagne', 'mustard', 'bright', 'maroon', 'army green', 'chestnut', 'yellow', 'nude', 'green', 'turquoise', 'burgundy', 'orange', 'black and white', 'neon', 'multicolor', 'beige', 'hot pink', 'lavender', 'tan', 'colorful', 'bronze', 'blush', 'ombre', 'navy', 'apricot', 'other']
+  flag: goods
+
+# seasons
+attr_4_value_nm:
+  type: category
+  transform: vocab
+  parameter: ['four seasons', 'autumm', 'all', 'summer', 'fall', 'spring', 'winter', 'autumn', 'other']
+  flag: goods
+
+# style
+attr_5_value_nm:
+  type: category
+  transform: vocab
+  parameter: ['classic', 'formal', 'ballet', 'bohemian', 'cute', 'other', 'sporty', 'modest', 'casual', 'jodhpur', 'street', 'modern', 'basics', 'glamorous', 'punk', 'streetwear', 'batwing', 'vacation', 'club', 'occasion', 'preppy', 'going out', 'royal', 'boho', 'business', 'romantic', 'comfort', 'vintage', 'messenger', 'stylish', 'business casual', 'tribal', 'long', 'vaction', 'pastorale', 'classy', 'simple', 'fashion', 'boho&nation', 'crop', 'elegant', 'dipped hem', 'rock', 'color block', 'honey girl', 'biker', 'sexy', 'motorcycle', 'star stalker', 'oversized', 'bomber', 'cartoon']
+  flag: goods
+
+# material
+attr_6_value_nm:
+  type: category
+  transform: vocab
+  parameter: ['faux fur', 'rayon', 'modal', 'mesh', 'straw', 'cotton spandex', 'satin', 'leather', 'polyester', 'guipure lace', 'pc', 'organza', 'cotton', 'plastic', 'velvet', 'oxford', 'corduroy', 'denim', 'ps', 'sweater', 'cotton blends', 'wood', 'jersey', 'sequins', 'pp', 'lace', 'paper', 'silica gel', 'spandex', 'silk', 'flannel', 'schiffy', 'woolen polyester', 'rubber', 'stainless steel', 'tweed', 'fiber', 'tpu', 'metallic', 'chiffon', 'crochet', 'polyamide', 'rhinestone', 'embroidery mesh', 'linen', 'acrylic fibres', 'pvc', 'suede', 'knit', 'shearling', 'wool', 'mohair', 'metal', 'canvas', 'resin', 'acrylic', 'glitter', 'pu leather', 'abs', 'viscose', 'nylon', 'sponge', 'synthetic', 'woollen blend', 'pu', 'other']
+  flag: goods
