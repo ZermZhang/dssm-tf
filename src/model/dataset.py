@@ -168,14 +168,13 @@ class _CsvDataset(_CTRDataset):
                 return features
             else:
                 label = features.pop('label')
-                class_label = tf.constant([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
                 ctr = tf.cond(tf.less_equal(1, label[0]), lambda:tf.constant([1.0]), lambda:tf.constant([0.0]))
                 # if use_weight:
                 #     pred = labels[0] if multivalue else labels  # pred must be rank 0 scalar
                 #     pos_weight, neg_weight = pos_w or 1, neg_w or 1
                 #     weight = tf.cond(pred, lambda: pos_weight, lambda: neg_weight)
                 #     features["weight_column"] = [weight]  # padded_batch need rank 1
-                return features, {'ctr_label':ctr, 'class_label':class_label}
+                return features, {'ctr_label': ctr}
         return parser
 
     def input_fn(self, mode, batch_size):
@@ -201,7 +200,7 @@ class _CsvDataset(_CTRDataset):
                 padding_dic.update({'label': [None]})
                 padded_shapes = padding_dic
             else:
-                padded_shapes = (padding_dic, {'ctr_label': [None], 'class_label': [None]})
+                padded_shapes = (padding_dic, {'ctr_label': [None]})
             dataset = dataset.padded_batch(batch_size, padded_shapes=padded_shapes)
         else:
             # batch(): each element tensor must have exactly same shape, change rank 0 to rank 1
