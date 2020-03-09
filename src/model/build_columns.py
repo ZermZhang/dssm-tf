@@ -48,16 +48,26 @@ def _build_model_columns(CONF):
         if f_type == 'category':
             if f_tran == 'hash_bucket':
                 hash_bucket_size = f_param
+                embed_dim = embedding_dim(hash_bucket_size)
                 col = tf.feature_column.categorical_column_with_hash_bucket(feature,
                                                                             hash_bucket_size=hash_bucket_size,
                                                                             dtype=tf.string)
+                emb_col = tf.feature_column.embedding_column(col,
+                                    dimension=embed_dim,
+                                    combiner='mean',
+                                    initializer=None,
+                                    ckpt_to_load_from=None,
+                                    tensor_name_in_ckpt=None,
+                                    max_norm=None,
+                                    trainable=True)
                 if f_flag == 'user':
-                    user_columns.append(col)
-                    user_cols_dim += hash_bucket_size
+                    user_columns.append(emb_col)
+                    user_cols_dim += embed_dim
                 else:
-                    good_columns.append(col)
-                    good_cols_dim += hash_bucket_size
+                    good_columns.append(emb_col)
+                    good_cols_dim += embed_dim
             elif f_tran == 'vocab':
+                embed_dim = embedding_dim(len(f_param))
                 col = tf.feature_column.categorical_column_with_vocabulary_list(feature,
                                                                                 vocabulary_list=list(
                                                                                     map(str, f_param)
@@ -65,12 +75,20 @@ def _build_model_columns(CONF):
                                                                                 dtype=None,
                                                                                 default_value=-1,
                                                                                 num_oov_buckets=0)
+                embedding_col = tf.feature_column.embedding_column(col,
+                            dimension=embed_dim,
+                            combiner='mean',
+                            initializer=None,
+                            ckpt_to_load_from=None,
+                            tensor_name_in_ckpt=None,
+                            max_norm=None,
+                            trainable=True) 
                 if f_flag == 'user':
-                    user_columns.append(col)
-                    user_cols_dim += len(f_param)
+                    user_columns.append(embedding_col)
+                    user_cols_dim += embed_dim
                 else:
-                    good_columns.append(col)
-                    good_cols_dim += len(f_param)
+                    good_columns.append(embedding_col)
+                    good_cols_dim += embed_dim
             elif f_tran == 'identity':
                 num_buckets = f_param
                 # Values outside range will result in default_value if specified, otherwise it will fail.
@@ -78,10 +96,10 @@ def _build_model_columns(CONF):
                                                                          num_buckets=num_buckets,
                                                                          default_value=0)
                 if f_flag == 'user':
-                    user_columns.append(col)
+                    user_columns.append(tf.feature_column.indicator_column(col))
                     user_cols_dim += num_buckets
                 else:
-                    good_columns.append(col)
+                    good_columns.append(tf.feature_column.indicator_column(col))
                     good_cols_dim += num_buckets
         elif f_type == 'continuous':
             normalizaton, boundaries = f_param["normalization"], f_param["boundaries"]
@@ -99,12 +117,20 @@ def _build_model_columns(CONF):
                     source_column=col,
                     boundaries=boundaries
                 )
+                emb_col = tf.feature_column.embedding_column(bucketized_feature_column,
+                                                               dimension=embedding_dim(len(boundaries)),
+                                                               combiner='mean',
+                                                               initializer=None,
+                                                               ckpt_to_load_from=None,
+                                                               tensor_name_in_ckpt=None,
+                                                               max_norm=None,
+                                                               trainable=True)
                 if f_flag == 'user':
-                    user_columns.append(bucketized_feature_column)
-                    user_cols_dim += (len(boundaries) + 1)
+                    user_columns.append(emb_col)
+                    user_cols_dim += embedding_dim(len(boundaries))
                 else:
-                    good_columns.append(bucketized_feature_column)
-                    good_cols_dim += (len(boundaries) + 1)
+                    good_columns.append(emb_col)
+                    good_cols_dim += embedding_dim(len(boundaries))
             else:
                 if f_flag == 'user':
                     user_columns.append(col)

@@ -54,20 +54,27 @@ def _dssm_model(features, labels, mode, params):
         user_emb = build_deep_layers(user_emb, params, mode, name='user')
     with tf.name_scope('goods'):
         good_emb = build_deep_layers(good_emb, params, mode, name='good')
+    
+    head = head_lib._binary_logistic_or_multi_class_head(
+            n_classes=2, weight_column=None, label_vocabulary=None,
+            loss_reduction=losses.Reduction.SUM)
+    logits = tf.layers.dense(tf.multiply(user_emb, good_emb), units=head.logits_dimension,
+        kernel_initializer=tf.glorot_uniform_initializer())
+    preds = tf.sigmoid(logits)
 
-    similarity = tf.reduce_sum(tf.multiply(user_emb, good_emb), axis=-1)
-    predictions = tf.nn.sigmoid(similarity)
+    # similarity = tf.reduce_sum(tf.multiply(user_emb, good_emb), axis=-1)
+    # predictions = tf.nn.sigmoid(similarity)
 
     if mode == tf.estimator.ModeKeys.PREDICT:
         predictions = {
-            'probabilities': predictions
+            'probabilities': preds
         }
         return tf.estimator.EstimatorSpec(mode, predictions=predictions)
 
-    loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=tf.cast(labels, tf.float32),
-                                                                 logits=tf.cast(similarity, tf.float32)))
+    loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=tf.cast(labels['ctr_label'], tf.float32),
+                                                                 logits=tf.cast(logits, tf.float32)))
 
-    auc = tf.metrics.auc(labels, predictions)
+    auc = tf.metrics.auc(labels['ctr_label'], preds)
     metrics = {'auc': auc}
     tf.summary.scalar('auc', auc[1])
 

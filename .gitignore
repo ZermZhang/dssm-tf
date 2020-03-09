@@ -130,3 +130,22 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+.idea/
+model/*
+!model/.placeholder
+.DS_Store
+*.py[cod]
+*/__pycache__
+*/.*.swp
+data/*
+!data/train/
+!data/test/
+!data/mid_data/
+data/train/*
+data/test/*
+data/mid_data/*
+!data/train/.placeholder
+!data/test/.placeholder
+!data/mid_data/.placeholder
+log/log*
+SavedModel/
