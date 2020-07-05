@@ -5,7 +5,7 @@
 @Author  : zz
 @File    : train.py
 @Software: PyCharm
-@Desc    : 整体的调度文件
+@Desc    : 整体的调度文件，增加性能检查工具的使用
 """
 import os
 import sys
