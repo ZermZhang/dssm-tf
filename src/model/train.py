@@ -36,6 +36,9 @@ def train_and_eval(model):
     :return: None
     :usage: 进行模型训练，并在指定步长的时候进行结果评估
     """
+    timeline_hook = tf.train.ProfilerHook(save_steps=100, output_dir=os.path.join(
+        os.getcwd(), './timeline_track'
+    ))
 
     hook = tf.contrib.estimator.stop_if_no_increase_hook(
         model,
@@ -50,7 +53,7 @@ def train_and_eval(model):
         input_fn=lambda: input_fn(os.path.join(os.getcwd(),
                                                CONFIG_TRAIN['train_data']),
                                   'train', CONFIG_TRAIN['batch_size']),
-        hooks=[hook]
+        hooks=[hook, timeline_hook]
     )
     eval_spec = tf.estimator.EvalSpec(
         input_fn=lambda: input_fn(os.path.join(os.getcwd(),
